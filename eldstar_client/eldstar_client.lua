@@ -93,13 +93,13 @@ function send_colliders()
     -- prevent breaking if world is not loaded
     if base_address >= 0x200000 and base_address <= 0x2FB800 then
         for collider = 0,total-1 do
-            collider_active = bit.band(read_u32_be(base_address + (collider * 0x1C)), 0x10000) == 0 and 1 or 0
+            collider_active = (read_u32_be(base_address + (collider * 0x1C)) & 0x10000) == 0 and 1 or 0
             tri_count = read_u16_be(base_address + (collider * 0x1C) + 0x0A)
             tri_table_ptr = read_u32_be(base_address + (collider * 0x1C) + 0x0C) - 0x80000000
             collider_ptr = read_u32_be(base_address + (collider * 0x1C) + 0x10) - 0x80000000
 
             -- ensure this collider is not badly formed
-            if tri_count ~= 0 and tri_table_ptr >= 0x200000 and tri_table_ptr <= 0x2FB800 and collider_ptr >= 0x200000 and collider_ptr <= 0x2FB800 and bit.band(collider_ptr - 0x10, 0x10000) == 0 then
+            if tri_count ~= 0 and tri_table_ptr >= 0x200000 and tri_table_ptr <= 0x2FB800 and collider_ptr >= 0x200000 and collider_ptr <= 0x2FB800 and ((collider_ptr - 0x10) & 0x10000) == 0 then
                 left = read_float(collider_ptr, true)
                 bottom = read_float(collider_ptr + 0x04, true)
                 back = read_float(collider_ptr + 0x08, true)
