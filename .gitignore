@@ -4,6 +4,7 @@ eldstar_server/deps/
 
 eldstar_server/.vs/
 
+/build/
 dists/
 
 Eldstar_*_Win32.zip

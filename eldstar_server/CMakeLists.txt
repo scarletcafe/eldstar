@@ -46,8 +46,9 @@ ENDIF()
 target_link_libraries(${PROJECT_NAME}_tassafe glfw)
 target_link_libraries(${PROJECT_NAME}_cheats glfw)
 
-find_package(glm REQUIRED)
-include_directories(${GLM_INCLUDE_DIRS})
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME}_tassafe glm::glm)
+target_link_libraries(${PROJECT_NAME}_cheats glm::glm)
 
 find_package(Freetype REQUIRED)
 include_directories(${FREETYPE_INCLUDE_DIRS})

@@ -9,7 +9,7 @@ jobs:
       CMAKE_GENERATOR: Visual Studio 17 2022
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Make local clone not shallow
         shell: bash
@@ -18,11 +18,11 @@ jobs:
       - name: Get tag name
         id: get_head
         shell: bash
-        run: echo ::set-output name=HEAD::$(git rev-list --count HEAD)+$(git rev-parse --short HEAD)
+        run: echo "name=HEAD::$(git rev-list --count HEAD)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies
         id: cache-dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: eldstar_server/deps
           key: ${{ runner.os }}-dependencies-${{ hashFiles('eldstar_server/download_deps.ps1') }}-${{ hashFiles('eldstar_server/build_deps.ps1') }}
@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload dependency artifact
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Eldstar_${{ steps.get_head.outputs.HEAD }}_WinDepends
           path: Eldstar_${{ steps.get_head.outputs.HEAD }}_WinDepends.zip
@@ -57,7 +57,7 @@ jobs:
           echo "Compressed debug files into Eldstar_${{ steps.get_head.outputs.HEAD }}_WinDebug.zip"
 
       - name: Upload debug artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Eldstar_${{ steps.get_head.outputs.HEAD }}_WinDebug
           path: Eldstar_${{ steps.get_head.outputs.HEAD }}_WinDebug.zip
@@ -76,7 +76,7 @@ jobs:
           echo "Compressed 32-bit distribution into Eldstar_${{ steps.get_head.outputs.HEAD }}_Win32.zip"
 
       - name: Upload 32-bit release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Eldstar_${{ steps.get_head.outputs.HEAD }}_Win32
           path: Eldstar_${{ steps.get_head.outputs.HEAD }}_Win32.zip
@@ -95,7 +95,7 @@ jobs:
           echo "Compressed 64-bit distribution into Eldstar_${{ steps.get_head.outputs.HEAD }}_Win64.zip"
 
       - name: Upload 64-bit release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Eldstar_${{ steps.get_head.outputs.HEAD }}_Win64
           path: Eldstar_${{ steps.get_head.outputs.HEAD }}_Win64.zip
@@ -104,12 +104,12 @@ jobs:
         id: get_version
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: echo "name=VERSION::${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: Create release
         id: create_release
         if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/create-release@master
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
