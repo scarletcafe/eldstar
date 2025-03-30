@@ -18,7 +18,7 @@ jobs:
       - name: Get tag name
         id: get_head
         shell: bash
-        run: echo "name=HEAD::$(git rev-list --count HEAD)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        run: echo "HEAD::$(git rev-list --count HEAD)+$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies
         id: cache-dependencies
@@ -104,7 +104,7 @@ jobs:
         id: get_version
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
-        run: echo "name=VERSION::${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        run: echo "VERSION::${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: Create release
         id: create_release
